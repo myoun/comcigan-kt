@@ -11,6 +11,7 @@ import io.ktor.util.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonPrimitive
 import okio.ByteString.Companion.encode
 import org.jsoup.Jsoup
 import java.net.URLEncoder
@@ -104,7 +105,7 @@ object ComciganUtil {
                         val sn = iperiod.toString().padStart(4, '0').drop(2).toInt()
                         val teacher = teachers[tn]
                         val subject = subjects[sn]
-                        periodList.add(Period(subject = subject.toString(), teacher = teacher.toString()))
+                        periodList.add(Period(subject = subject.jsonPrimitive.content, teacher = teacher.jsonPrimitive.content))
                     }
                     dayList.add(periodList)
                 }
