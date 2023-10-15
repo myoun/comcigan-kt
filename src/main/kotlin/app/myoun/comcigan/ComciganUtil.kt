@@ -61,7 +61,7 @@ object ComciganUtil {
     suspend fun searchSchool(schoolName: String): SchoolSearchResult {
         val SEARCHPATH = SCSEARCH_REGEX.findAll(script).first().value
 
-        val schoolCodeSearch = client.get("${BASEURL}${SEARCHPATH}${URLEncoder.encode("무원중학교", "EUC-KR")}") {
+        val schoolCodeSearch = client.get("${BASEURL}${SEARCHPATH}${URLEncoder.encode(schoolName, "EUC-KR")}") {
             timeout {
                 requestTimeoutMillis = 60 * 1000
             }
@@ -91,20 +91,20 @@ object ComciganUtil {
         val teachers = rawTimetable["자료${TEACHER_NUM}"]!!.jsonArray
         val dayData = rawTimetable["자료${DAY_DATA_NUM}"]!!.jsonArray
 
-        val timetable = mutableListOf<List<List<List<Pair<String, String>>>>>()
+        val timetable = mutableListOf<List<List<List<Period>>>>()
 
         for (igrade in dayData.drop(1)) {
-            val classList = mutableListOf<List<List<Pair<String, String>>>>()
+            val classList = mutableListOf<List<List<Period>>>()
             for (iclass in igrade.jsonArray.drop(1)) {
-                val dayList = mutableListOf<List<Pair<String, String>>>()
+                val dayList = mutableListOf<List<Period>>()
                 for (iday in iclass.jsonArray.slice(1..5)) {
-                    val periodList = mutableListOf<Pair<String, String>>()
+                    val periodList = mutableListOf<Period>()
                     for (iperiod in iday.jsonArray.drop(1).filter { it.toString().dropLast(2).isNotEmpty() }) {
                         val tn = iperiod.toString().dropLast(2).toInt()
                         val sn = iperiod.toString().padStart(4, '0').drop(2).toInt()
                         val teacher = teachers[tn]
                         val subject = subjects[sn]
-                        periodList.add(subject.toString() to teacher.toString())
+                        periodList.add(Period(subject = subject.toString(), teacher = teacher.toString()))
                     }
                     dayList.add(periodList)
                 }

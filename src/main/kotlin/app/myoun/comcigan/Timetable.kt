@@ -2,7 +2,7 @@ package app.myoun.comcigan
 
 import kotlinx.coroutines.runBlocking
 
-class School private constructor(val schoolCode: String) {
+class School(val schoolCode: String) {
 
     companion object {
         suspend fun search(name: String): List<SearchedSchool> {
@@ -12,9 +12,6 @@ class School private constructor(val schoolCode: String) {
         suspend fun search(name: String, region: String): List<SearchedSchool> {
             return ComciganUtil.searchSchool(name, region).schoolSearch
         }
-
-        fun fromSchoolCode(schoolCode: String): School =
-            School(schoolCode)
     }
 
     var timetable: Timetable

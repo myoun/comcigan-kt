@@ -1,3 +1,3 @@
 package app.myoun.comcigan
 
-typealias Timetable = List<List<List<List<Pair<String, String>>>>>
+typealias Timetable = List<List<List<List<Period>>>>

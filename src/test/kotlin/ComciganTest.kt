@@ -1,5 +1,6 @@
 import app.myoun.comcigan.ComciganUtil
 import app.myoun.comcigan.School
+import app.myoun.comcigan.Timetable
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 
@@ -8,12 +9,12 @@ class ComciganTest {
     @Test
     fun `학교 검색 테스트`() = runBlocking {
         val searchByName = School.search("컴시간고등학교")
-        val searchByNameAndRegion = School.search("컴시간고등학교", "경기")
+        val searchByNameAndRegion = School.search("컴시간고등학교", "강원")
 
         assert(
             searchByName.size == 1 &&
             searchByNameAndRegion.size == 1 &&
-            searchByNameAndRegion[0].region == "경기"
+            searchByNameAndRegion[0].region == "강원"
         )
     }
 
@@ -21,8 +22,8 @@ class ComciganTest {
     fun `시간표 가져오기 테스트`() = runBlocking {
         val schoolCode = ComciganUtil.searchSchool("컴시간고등학교").schoolSearch.first().schoolCode
 
-        val school = School.fromSchoolCode(schoolCode)
+        val timetable = School(schoolCode)
 
-        assert(school.timetable.size == 3)
+        assert(timetable.timetable.size == 3)
     }
 }
